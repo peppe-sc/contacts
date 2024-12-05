@@ -19,15 +19,15 @@ public class MainScreen {
 	    void updateModel( Person p);
 	}
 	
-	PeopleList p;
+	PeopleList peopleListWrapper;
 	List<Person> list;
 	JTable contactsTable;
 	DefaultTableModel tableModel;
 	
 	public MainScreen() {
-		p = new PeopleList();
+		peopleListWrapper = new PeopleList();
 		
-		list = p.getPeopleList();
+		list = peopleListWrapper.getPeopleList();
 		
 
         //Frame creation
@@ -47,6 +47,7 @@ public class MainScreen {
         for (Person person : list) {
             tableModel.addRow(new Object[]{person.getName(), person.getSurname(),  person.getPhone()});
         }
+        
         
         //Create table and set the dynamic size
         contactsTable = new JTable(tableModel);
@@ -71,7 +72,7 @@ public class MainScreen {
         addContactBtn.addActionListener(e -> {
         	
         	if(contactsTable.getSelectedRow()==-1) {
-        		Editor newPane = new Editor(null , "New Contact", p, person->{
+        		Editor newPane = new Editor(null , "New Contact", peopleListWrapper, person->{
         			tableModel.addRow(new Object[]{person.getName(), person.getSurname(),  person.getPhone()});
         			contactsTable.setModel(tableModel);
         			//list.add(person);
@@ -86,13 +87,45 @@ public class MainScreen {
         });
         editContactBtn.addActionListener(e -> {
         	if(contactsTable.getSelectedRow()!=-1) {
-        		Editor newPane = new Editor(list.get(contactsTable.getSelectedRow()) , "Edit Contact", p, person ->{});
+        		Editor newPane = new Editor(list.get(contactsTable.getSelectedRow()) , "Edit Contact", peopleListWrapper, person ->{
+        			tableModel = new DefaultTableModel();
+        	        tableModel.addColumn("Name");
+        	        tableModel.addColumn("Surname");
+        	        //tableModel.addColumn("Address");
+        	        tableModel.addColumn("Phone");
+        	        //tableModel.addColumn("Age");
+
+        	        //Add people to the table
+        	        for (Person p : list) {
+        	            tableModel.addRow(new Object[]{p.getName(), p.getSurname(),  p.getPhone()});
+        	        }
+        	        contactsTable.setModel(tableModel);
+        		});
         		newPane.show();
         	}else {
         		//TO-DO throw the error
         	}
         });
-        //deleteContactBtn.addActionListener(e -> openNewWindow("Window 3"));
+        deleteContactBtn.addActionListener(e -> {
+        	if(contactsTable.getSelectedRow()!=-1) {
+        		peopleListWrapper.delete(list.get(contactsTable.getSelectedRow()));
+        		tableModel = new DefaultTableModel();
+    	        tableModel.addColumn("Name");
+    	        tableModel.addColumn("Surname");
+    	        //tableModel.addColumn("Address");
+    	        tableModel.addColumn("Phone");
+    	        //tableModel.addColumn("Age");
+
+    	        //Add people to the table
+    	        for (Person p : list) {
+    	            tableModel.addRow(new Object[]{p.getName(), p.getSurname(),  p.getPhone()});
+    	        }
+    	        contactsTable.setModel(tableModel);
+        	}else {
+        		
+        	}
+        	
+        });
 
         // Add buttons to the toolbar
         toolBar.add(addContactBtn);

@@ -40,12 +40,25 @@ public class Editor {
 	public void show() {
 		frame.setVisible(true);
 	}
-	
+	private void close() {
+		frame.setVisible(false);
+	}
 	private void save(Person p) {
 		
 		peopleList.add(p);
 		
 		operation.updateModel(p);
+		
+		close();
+		
+	}
+	private void edit(Person p,String name, String surname, String address, String phone, int age) {
+		
+		peopleList.edit(p, name, surname, address, age, phone);
+		
+		operation.updateModel(p);
+		
+		close();
 		
 	}
 	
@@ -139,6 +152,8 @@ public class Editor {
         saveBtn.addActionListener(e->{
         	if (person == null) {
         		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
+        	}else {
+        		edit(person,nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText()));
         	}
         });
         

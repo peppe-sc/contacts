@@ -23,7 +23,7 @@ public class PeopleList {
 	
 	public void delete(Person p) {
 		peopleList.remove(peopleList.indexOf(p));
-		
+		db.write(peopleList);
 	}
 	
 	public void add(Person person) {
@@ -31,7 +31,14 @@ public class PeopleList {
 		db.write(peopleList);
 	}
 	
-	public void edit(Person person, String name, String surname, String address, String age, String phone) {
+	public void edit(Person person, String name, String surname, String address, int age, String phone) {
+		person.setName(name);
+		person.setSurname(surname);
+		person.setAddress(address);
+		person.setPhone(phone);
+		person.setAge(age);
+		
+		db.write(peopleList);
 		
 	}
 	
