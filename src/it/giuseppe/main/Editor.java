@@ -156,12 +156,16 @@ public class Editor {
         	if (nameField.getText().isBlank() || surnameField.getText().isBlank() || addressField.getText().isBlank() || phoneField.getText().isBlank() || ageField.getText().isBlank()) {
         		JOptionPane.showMessageDialog(frame, "No empty fields allowed", "Error",JOptionPane.ERROR_MESSAGE);
         	}else {
-            	
-        		if(person == null) {
-            		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
-        		}else {
-            		edit(person,nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText()));
-        		}
+            	if (isInt(ageField.getText())) {
+            		if(person == null) {
+                		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
+            		}else {
+                		edit(person,nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText()));
+            		}
+            	}else {
+            		JOptionPane.showMessageDialog(frame, "Age must be an integer", "Error",JOptionPane.ERROR_MESSAGE);
+            	}
+        		
         		
         	}
         		
@@ -183,6 +187,15 @@ public class Editor {
         
         frame.pack();
 		
+	}
+	
+	private boolean isInt(String s) {
+		try {
+			Integer.parseInt(s);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 	
 }
