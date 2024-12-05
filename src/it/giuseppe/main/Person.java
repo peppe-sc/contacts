@@ -46,4 +46,12 @@ public class Person {
 		this.age = age;
 	}
 	
+	public Person(String name,String surname, String address) {
+		this.name = name;
+		this.surname = surname;
+		this.address = address;
+		this.phone = phone;
+		this.age = age;
+	}
+	
 }
