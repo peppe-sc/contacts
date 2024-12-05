@@ -1,10 +1,18 @@
 package it.giuseppe.main;
 
+
+import java.util.List;
+
 public class Rubrica {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		PeopleList p = new PeopleList();
+		
+		List<Person> list = p.getPeopleList();
+		
+		
+		
 	}
 
 }
