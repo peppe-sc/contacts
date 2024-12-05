@@ -11,84 +11,16 @@ public class Rubrica {
 
 	public static void main(String[] args) {
 		
-		PeopleList p = new PeopleList();
-		
-		List<Person> list = p.getPeopleList();
-		
-
-        //Frame creation
-        JFrame frame = new JFrame("Contacts");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        //Table model creation
-        DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Name");
-        tableModel.addColumn("Surname");
-        //tableModel.addColumn("Address");
-        tableModel.addColumn("Phone");
-        //tableModel.addColumn("Age");
-
-        //Add people to the table
-        for (Person person : list) {
-            tableModel.addRow(new Object[]{person.getName(), person.getSurname(),  person.getPhone()});
-        }
-
-        //Create table and set the dynamic size
-        JTable contactsTable = new JTable(tableModel);
-        contactsTable.setFillsViewportHeight(true); 
-        contactsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); 
-        
-        contactsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        //Create a scroll pane and add the table to the pane
-        JScrollPane scrollPane = new JScrollPane(contactsTable);
-        frame.add(scrollPane, BorderLayout.CENTER);
-        
-        //Create toolbar with buttons
-        JToolBar toolBar = new JToolBar();
-        toolBar.setLayout(new GridLayout(1,3));
-        
-        JButton addContactBtn = new JButton("New Contact");
-        JButton button2 = new JButton("Edit Contact");
-        JButton button3 = new JButton("Delete Contact");
-
-        // Add action listeners to the buttons
-        addContactBtn.addActionListener(e -> {
-        	
-        	if(contactsTable.getSelectedRow()==-1) {
-        		Editor newPane = new Editor(null , "New Contact");
-        		newPane.show();
-        	}else {
-        		//TO-DO throw the error
-        	}
-        	
-        	//Editor newPane = new Editor(contactsTable.getSelectedRow()!=-1? list.get(contactsTable.getSelectedRow()):null , "New Contact");
-        	
-        });
-        button2.addActionListener(e -> openNewWindow("Window 2"));
-        button3.addActionListener(e -> openNewWindow("Window 3"));
-
-        // Add buttons to the toolbar
-        toolBar.add(addContactBtn);
-        toolBar.add(button2);
-        toolBar.add(button3);
-        
-        // Add toolbar to the frame
-        frame.add(toolBar, BorderLayout.PAGE_END);
-        
-        
-        
-        //Adapt the frame to the subcomponents
-        frame.pack();
-
-        //Show the frame
-        frame.setVisible(true);
+		MainScreen m = new MainScreen();
 		
 		
 		
 	}
-	
+	@FunctionalInterface
+	public interface Operation {
+	    int apply(int a, int b);
+	}
+
 	private static void openNewWindow(String title) {
         JFrame newWindow = new JFrame(title);
         newWindow.setSize(300, 200);

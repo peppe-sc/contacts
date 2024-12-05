@@ -54,4 +54,22 @@ public class Person {
 		this.age = age;
 	}
 	
+	@Override
+	public boolean equals(Object person) {
+		
+		if(person == this) {
+			return true;
+		}
+		
+		if (!(person instanceof Person)) {
+            return false;
+        }
+		
+		Person tmp = (Person) person;
+		
+		
+		return tmp.getName() == this.name && tmp.getSurname() == this.surname && tmp.getAddress() == this.address && tmp.getPhone() == this.phone && tmp.getAge() == this.age;
+		
+	}
+	
 }

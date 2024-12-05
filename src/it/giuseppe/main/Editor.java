@@ -13,18 +13,25 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
+import it.giuseppe.main.MainScreen.Operation;
+
 public class Editor {
 	
 	Person person;
 	
+	PeopleList peopleList;
+	
 	JFrame frame;
 	
-	public Editor(Person person, String purpose) {
+	Operation operation;
+	
+	public Editor(Person person, String purpose, PeopleList peopleList, Operation operation) {
 		
 		//Assign person and purpose, TO-DO if purpose is new contact person will be null
 		
 		this.person = person;
-		
+		this.peopleList = peopleList;
+		this.operation = operation;
 		//Create the new window
 		buildWindow(purpose);
 		
@@ -34,12 +41,16 @@ public class Editor {
 		frame.setVisible(true);
 	}
 	
-	private boolean save() {
-		return true;
+	private void save(Person p) {
+		
+		peopleList.add(p);
+		
+		operation.updateModel(p);
+		
 	}
 	
-	private boolean cancel() {
-		return true;
+	private void cancel() {
+		frame.setVisible(false);
 	}
 	
 	private void buildWindow(String purpose) {
@@ -123,6 +134,17 @@ public class Editor {
         
         JButton saveBtn = new JButton("Save");
         JButton cancelBtn = new JButton("Cancel");
+        
+        
+        saveBtn.addActionListener(e->{
+        	if (person == null) {
+        		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
+        	}
+        });
+        
+        cancelBtn.addActionListener(e->{
+        	cancel();
+        });
         
         toolBar.add(saveBtn);
         toolBar.add(cancelBtn);

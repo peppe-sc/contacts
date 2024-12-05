@@ -1,8 +1,10 @@
 package it.giuseppe.main;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,6 +46,20 @@ public class Database {
 		
 		return result;
 		
+	}
+	
+	public void write(List<Person> list) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            // Write each line to the file
+            for (Person person : list) {
+            	String line = ""+person.getName()+";"+person.getSurname()+";"+person.getAddress()+";"+person.getPhone()+";"+person.getAge();
+                writer.write(line);
+                writer.newLine(); 
+            }
+            System.out.println("File overwritten successfully.");
+        } catch (IOException e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        }
 	}
 	
 }
