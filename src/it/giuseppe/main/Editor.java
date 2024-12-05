@@ -9,6 +9,7 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
@@ -150,11 +151,22 @@ public class Editor {
         
         
         saveBtn.addActionListener(e->{
-        	if (person == null) {
-        		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
+        	
+        		
+        	if (nameField.getText().isBlank() || surnameField.getText().isBlank() || addressField.getText().isBlank() || phoneField.getText().isBlank() || ageField.getText().isBlank()) {
+        		JOptionPane.showMessageDialog(frame, "No empty fields allowed", "Error",JOptionPane.ERROR_MESSAGE);
         	}else {
-        		edit(person,nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText()));
+            	
+        		if(person == null) {
+            		save(new Person(nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText())));
+        		}else {
+            		edit(person,nameField.getText(),surnameField.getText(),addressField.getText(),phoneField.getText(),Integer.parseInt(ageField.getText()));
+        		}
+        		
         	}
+        		
+        	
+        	
         });
         
         cancelBtn.addActionListener(e->{

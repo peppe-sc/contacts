@@ -56,9 +56,8 @@ public class Database {
                 writer.write(line);
                 writer.newLine(); 
             }
-            System.out.println("File overwritten successfully.");
         } catch (IOException e) {
-            System.err.println("An error occurred: " + e.getMessage());
+            e.printStackTrace();
         }
 	}
 	

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
@@ -36,12 +37,16 @@ public class MainScreen {
         frame.setLayout(new BorderLayout());
 
         //Table model creation
-        tableModel = new DefaultTableModel();
+        tableModel = new DefaultTableModel() {
+        	@Override
+            public boolean isCellEditable(int row, int column) {
+                // Return false to make the table non-editable
+                return false;
+            }
+        };
         tableModel.addColumn("Name");
         tableModel.addColumn("Surname");
-        //tableModel.addColumn("Address");
         tableModel.addColumn("Phone");
-        //tableModel.addColumn("Age");
 
         //Add people to the table
         for (Person person : list) {
@@ -71,58 +76,42 @@ public class MainScreen {
         // Add action listeners to the buttons
         addContactBtn.addActionListener(e -> {
         	
-        	if(contactsTable.getSelectedRow()==-1) {
-        		Editor newPane = new Editor(null , "New Contact", peopleListWrapper, person->{
-        			tableModel.addRow(new Object[]{person.getName(), person.getSurname(),  person.getPhone()});
-        			contactsTable.setModel(tableModel);
-        			//list.add(person);
-        		});
-        		newPane.show();
-        	}else {
-        		//TO-DO throw the error
-        	}
         	
-        	//Editor newPane = new Editor(contactsTable.getSelectedRow()!=-1? list.get(contactsTable.getSelectedRow()):null , "New Contact");
+        	Editor newPane = new Editor(null , "New Contact", peopleListWrapper, person->{
+        		tableModel.addRow(new Object[]{person.getName(), person.getSurname(),  person.getPhone()});
+        		contactsTable.setModel(tableModel);
+        		
+        	});
+        	newPane.show();
+        	
+        	
         	
         });
         editContactBtn.addActionListener(e -> {
         	if(contactsTable.getSelectedRow()!=-1) {
         		Editor newPane = new Editor(list.get(contactsTable.getSelectedRow()) , "Edit Contact", peopleListWrapper, person ->{
-        			tableModel = new DefaultTableModel();
-        	        tableModel.addColumn("Name");
-        	        tableModel.addColumn("Surname");
-        	        //tableModel.addColumn("Address");
-        	        tableModel.addColumn("Phone");
-        	        //tableModel.addColumn("Age");
-
-        	        //Add people to the table
-        	        for (Person p : list) {
-        	            tableModel.addRow(new Object[]{p.getName(), p.getSurname(),  p.getPhone()});
-        	        }
-        	        contactsTable.setModel(tableModel);
+        			refreshTable();
         		});
         		newPane.show();
         	}else {
-        		//TO-DO throw the error
+        		JOptionPane.showMessageDialog(frame, "Select a contact to edit", "Error",JOptionPane.ERROR_MESSAGE);
         	}
         });
         deleteContactBtn.addActionListener(e -> {
         	if(contactsTable.getSelectedRow()!=-1) {
-        		peopleListWrapper.delete(list.get(contactsTable.getSelectedRow()));
-        		tableModel = new DefaultTableModel();
-    	        tableModel.addColumn("Name");
-    	        tableModel.addColumn("Surname");
-    	        //tableModel.addColumn("Address");
-    	        tableModel.addColumn("Phone");
-    	        //tableModel.addColumn("Age");
-
-    	        //Add people to the table
-    	        for (Person p : list) {
-    	            tableModel.addRow(new Object[]{p.getName(), p.getSurname(),  p.getPhone()});
-    	        }
-    	        contactsTable.setModel(tableModel);
-        	}else {
         		
+        		Person tmp = list.get(contactsTable.getSelectedRow());
+        		
+        		int choice = JOptionPane.showConfirmDialog(frame, "Do you want to Delete " + tmp.getName() + " " + tmp.getSurname() +"?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        		
+        		if(choice == JOptionPane.YES_OPTION) {
+        			peopleListWrapper.delete(list.get(contactsTable.getSelectedRow()));
+            		refreshTable();
+        		}
+        		
+        		
+        	}else {
+        		JOptionPane.showMessageDialog(frame, "Select a contact to delete", "Error",JOptionPane.ERROR_MESSAGE);
         	}
         	
         });
@@ -142,6 +131,26 @@ public class MainScreen {
 
         //Show the frame
         frame.setVisible(true);
+	}
+	
+	private void refreshTable() {
+		
+		tableModel = new DefaultTableModel() {
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+		};
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Surname");
+        tableModel.addColumn("Phone");
+        
+
+        //Add people to the table
+        for (Person p : list) {
+            tableModel.addRow(new Object[]{p.getName(), p.getSurname(),  p.getPhone()});
+        }
+        contactsTable.setModel(tableModel);
 	}
 	
 }
